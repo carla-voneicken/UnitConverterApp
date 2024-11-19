@@ -1,0 +1,165 @@
+package com.example.unitconverter
+
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.unitconverter.databinding.FragmentWeightBinding
+import java.text.DecimalFormat
+
+class WeightFragment : Fragment() {
+
+    private lateinit var binding: FragmentWeightBinding
+    // Declaring ignoreTextChanges to prevent infinite loops
+    private var ignoreTextChanges = false
+    // Declaring a decimalFormat to set formatting of the numbers
+    private val decimalFormat = DecimalFormat("#.##")
+
+
+    // Only setup the root binding in the onCreateView method
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentWeightBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupAllTextWatchers()
+    }
+
+    private fun setupAllTextWatchers() {
+        // Set up TextWatchers for each EditText
+        setupTextWatcher(binding.editTextKilogram, ConversionUnitWeight.KILOGRAM)
+        setupTextWatcher(binding.editTextGram, ConversionUnitWeight.GRAM)
+        setupTextWatcher(binding.editTextMilligram, ConversionUnitWeight.MILLIGRAM)
+        setupTextWatcher(binding.editTextStone, ConversionUnitWeight.STONE)
+        setupTextWatcher(binding.editTextPound, ConversionUnitWeight.POUND)
+        setupTextWatcher(binding.editTextOunce, ConversionUnitWeight.OUNCE)
+    }
+
+
+    // A function to set up TextWatchers for each EditText
+    private fun setupTextWatcher(editText: EditText, unit: ConversionUnitWeight) {
+        editText.addTextChangedListener(object : TextWatcher {
+            // We don't need these functions, but they need to be overridden for this abstract class of TextWatcher
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            // This function is called after the text in a given EditText has been changed (after every keystroke)
+            // The provided variable s represents the text that was entered (the whole text in the EditText)
+            override fun afterTextChanged(s: Editable?) {
+                // If ignoreTextChanges is true, don't update the fields, otherwise this would create an infinite loop
+                if (ignoreTextChanges) return
+
+                // If the EditText is empty or null (e.g. if the user deletes all characters in a field), clear all fields
+                if (s.isNullOrEmpty()) {
+                    clearAllFields()
+                    return
+                }
+
+                // If there is a user input in the EditText, try to first convert it to a String (because the default
+                // type is an Editable), then to a double which we can calculate with. Set ignoreTextChanges to true so
+                // that no other TextChangedListeners get called when updating the other fields. Then call the updateFields
+                // function which takes the inputValue (as a double) and the unit that inputValue represents (aka the unit of
+                // the field the user typed in).
+                // If this throws a NumberFormatException (e.g. when the user types something else than a number (with the provided
+                // keypad this only happens when typing a '.'), let the user know they should enter a number via Toast.
+                // Finally set the ignoreTextChanges back to false
+                try {
+                    val inputValue = s.toString().toDouble()
+                    ignoreTextChanges = true
+                    updateFields(inputValue, unit)
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(context, "Please enter a number", Toast.LENGTH_SHORT)
+                        .show()
+                } finally {
+                    ignoreTextChanges = false
+                }
+            }
+        })
+    }
+
+    // This function takes the inputValue and its unit and updates all the other fields in the layout
+    private fun updateFields(value: Double, unit: ConversionUnitWeight) {
+        // Convert the input value to meters
+        val baseValue = unit.convertToBase(value)
+
+        // Update all fields based on the base value
+        // The first line calls the convertFromBase() method of the ConversionUnit class for the given unit,
+        // and formats the result using the decimalFormat.
+        // The second line sets the selection of the editText (aka the cursor) to the end of the text
+        binding.editTextKilogram.setText(
+            decimalFormat.format(
+                ConversionUnitWeight.KILOGRAM.convertFromBase(
+                    baseValue
+                )
+            )
+        )
+        binding.editTextKilogram.setSelection(binding.editTextKilogram.text!!.length)
+
+        // Because meter is the baseValue, we don't have to convert the value for this one
+        binding.editTextGram.setText(decimalFormat.format(baseValue))
+        binding.editTextGram.setSelection(binding.editTextGram.text!!.length)
+
+        binding.editTextMilligram.setText(
+            decimalFormat.format(
+                ConversionUnitWeight.MILLIGRAM.convertFromBase(
+                    baseValue
+                )
+            )
+        )
+        binding.editTextMilligram.setSelection(binding.editTextMilligram.text!!.length)
+
+        binding.editTextStone.setText(
+            decimalFormat.format(
+                ConversionUnitWeight.STONE.convertFromBase(
+                    baseValue
+                )
+            )
+        )
+        binding.editTextStone.setSelection(binding.editTextStone.text!!.length)
+
+        binding.editTextPound.setText(
+            decimalFormat.format(
+                ConversionUnitWeight.POUND.convertFromBase(
+                    baseValue
+                )
+            )
+        )
+        binding.editTextPound.setSelection(binding.editTextPound.text!!.length)
+
+        binding.editTextOunce.setText(
+            decimalFormat.format(
+                ConversionUnitWeight.OUNCE.convertFromBase(
+                    baseValue
+                )
+            )
+        )
+        binding.editTextOunce.setSelection(binding.editTextOunce.text!!.length)
+    }
+
+    // This function clears all the fields in the layout. To prevent an infinite loop, we set
+    // ignoreTextChanges to true when changing the fields and set it back to false after the changes
+    private fun clearAllFields() {
+        ignoreTextChanges = true
+        try {
+            binding.editTextKilogram.setText("")
+            binding.editTextGram.setText("")
+            binding.editTextMilligram.setText("")
+            binding.editTextStone.setText("")
+            binding.editTextPound.setText("")
+            binding.editTextOunce.setText("")
+        } finally {
+            ignoreTextChanges = false
+        }
+    }
+}
