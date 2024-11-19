@@ -2,12 +2,10 @@ package com.example.unitconverter
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.unitconverter.databinding.ActivityMainBinding
@@ -16,7 +14,6 @@ import com.example.unitconverter.temperatureconverter.TemperatureFragment
 import com.example.unitconverter.volumeconverter.VolumeFragment
 import com.example.unitconverter.weightconverter.WeightFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationBarView
 
 class MainActivity : AppCompatActivity() {
 
