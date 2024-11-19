@@ -2,18 +2,16 @@ package com.example.unitconverter
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import com.example.unitconverter.databinding.ActivityMainBinding
+import com.example.unitconverter.lengthconverter.LengthFragment
+import com.example.unitconverter.temperatureconverter.TemperatureFragment
+import com.example.unitconverter.volumeconverter.VolumeFragment
+import com.example.unitconverter.weightconverter.WeightFragment
 import com.google.android.material.navigation.NavigationBarView
-import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
 

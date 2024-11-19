@@ -1,4 +1,4 @@
-package com.example.unitconverter
+package com.example.unitconverter.weightconverter
 
 enum class ConversionUnitWeight(private val toBaseFactor: Double) {
     KILOGRAM(1000.0),

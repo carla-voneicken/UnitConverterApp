@@ -1,4 +1,4 @@
-package com.example.unitconverter
+package com.example.unitconverter.lengthconverter
 
 enum class ConversionUnitLength(private val toBaseFactor: Double) {
     KILOMETER(1000.0),

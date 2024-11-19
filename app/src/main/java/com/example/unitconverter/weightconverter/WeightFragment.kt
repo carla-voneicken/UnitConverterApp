@@ -1,4 +1,4 @@
-package com.example.unitconverter
+package com.example.unitconverter.weightconverter
 
 import android.os.Bundle
 import android.text.Editable
