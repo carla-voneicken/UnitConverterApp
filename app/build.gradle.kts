@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     // Fragments
-    implementation("androidx.fragment:fragment-ktx:1.8.2")
+    implementation("androidx.fragment:fragment-ktx:1.8.5")
     // Viewpager
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     testImplementation(libs.junit)
